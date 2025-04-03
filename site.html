@@ -3,52 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Feliz Aniversário!</title>
+    <title>Feliz Aniversário,Meu bem !</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             text-align: center;
-            background-color: #ffe4e1;
-            color: #333;
+            background-color: #1a1a1a;
+            color: #fff;
             padding: 20px;
+            background-image: url('https://source.unsplash.com/1600x900/?flowers');
+            background-size: cover;
+            background-position: center;
         }
         .container {
-            max-width: 600px;
+            max-width: 90%;
             margin: auto;
-            background: white;
+            background: rgba(0, 0, 0, 0.8);
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.2);
         }
-        img {
-            max-width: 100%;
-            border-radius: 10px;
+        .image-gallery img {
+            width: 100%;
+            height: 100vh;
+            object-fit: cover;
             margin-top: 10px;
+            border-radius: 10px;
+        }
+        .rodape {
+            margin-top: 20px;
+            font-style: italic;
+            color: #ccc;
         }
     </style>
     <script>
-        async function carregarFrase() {
+        async function carregarFrases() {
             try {
-                const resposta = await fetch('https://raw.githubusercontent.com/seu-usuario/seu-repositorio/main/frases.json');
-                const dados = await resposta.json();
-                const frases = dados.frases;
-                const fraseAleatoria = frases[Math.floor(Math.random() * frases.length)];
-                document.getElementById('frase').innerText = fraseAleatoria;
+                const respostaTeAmo = await fetch('https://raw.githubusercontent.com/ArthurRamos26/Aniversario_Ste/refs/heads/main/teamo.json?token=GHSAT0AAAAAADBQMPWKLOZGGM334QFYL2BIZ7OBTMQ');
+                const respostaFrases = await fetch('https://raw.githubusercontent.com/ArthurRamos26/Aniversario_Ste/refs/heads/main/frases.json?token=GHSAT0AAAAAADBQMPWLFXY37A2Z5B32KWC4Z7OBS5A');
+                
+                const dadosTeAmo = await respostaTeAmo.json();
+                const dadosFrases = await respostaFrases.json();
+                
+                const frasesTeAmo = dadosTeAmo.frases;
+                const frasesGerais = dadosFrases.frases;
+                
+                const fraseTeAmoAleatoria = frasesTeAmo[Math.floor(Math.random() * frasesTeAmo.length)];
+                const fraseGeralAleatoria = frasesGerais[Math.floor(Math.random() * frasesGerais.length)];
+                
+                document.getElementById('teAmo').innerText = fraseTeAmoAleatoria;
+                document.getElementById('fraseGeral').innerText = fraseGeralAleatoria;
             } catch (error) {
-                console.error('Erro ao carregar a frase:', error);
-                document.getElementById('frase').innerText = 'Erro ao carregar a frase. Tente novamente mais tarde!';
+                console.error('Erro ao carregar as frases:', error);
+                document.getElementById('teAmo').innerText = 'Erro ao carregar "Te Amo". Tente novamente mais tarde!';
+                document.getElementById('fraseGeral').innerText = 'Erro ao carregar a frase especial. Tente novamente mais tarde!';
             }
         }
-        window.onload = carregarFrase;
+        window.onload = carregarFrases;
     </script>
 </head>
 <body>
     <div class="container">
         <h1>Feliz Aniversário, Amor! 🎉</h1>
-        <p id="frase">Carregando uma frase especial...</p>
-        <img src="https://via.placeholder.com/400" alt="Foto especial">
-        <p>Que seu dia seja cheio de alegria, amor e momentos inesquecíveis!</p>
-        <p>Te amo! ❤️</p>
+        <p id="teAmo"><strong>Carregando "Te Amo" em uma língua diferente...</strong></p>
+        <div class="image-gallery">
+            <img src="https://via.placeholder.com/600x1200" alt="Foto especial 1">
+            <img src="https://via.placeholder.com/600x1200" alt="Foto especial 2">
+            <img src="https://via.placeholder.com/600x1200" alt="Foto especial 3">
+        </div>
+        <p class="rodape" id="fraseGeral">Carregando uma mensagem especial...</p>
     </div>
 </body>
 </html>
