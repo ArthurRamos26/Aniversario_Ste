@@ -39,9 +39,8 @@
     <script>
         async function carregarFrases() {
             try {
-                const respostaTeAmo = await fetch('https://raw.githubusercontent.com/ArthurRamos26/Aniversario_Ste/refs/heads/main/teamo.json?token=GHSAT0AAAAAADBQMPWKLOZGGM334QFYL2BIZ7OBTMQ');
-                const respostaFrases = await fetch('https://raw.githubusercontent.com/ArthurRamos26/Aniversario_Ste/refs/heads/main/frases.json?token=GHSAT0AAAAAADBQMPWLFXY37A2Z5B32KWC4Z7OBS5A');
-                
+                const respostaTeAmo = await fetch('https://raw.githubusercontent.com/ArthurRamos26/Aniversario_Ste/refs/heads/main/teamo.json');
+                const respostaFrases = await fetch('https://raw.githubusercontent.com/ArthurRamos26/Aniversario_Ste/refs/heads/main/frases.json');
                 const dadosTeAmo = await respostaTeAmo.json();
                 const dadosFrases = await respostaFrases.json();
                 
@@ -67,9 +66,9 @@
         <h1>Feliz Aniversário, Stezinha! 🎉</h1>
         <p id="teAmo"><strong>Carregando "Te Amo" em uma língua diferente...</strong></p>
         <div class="image-gallery">
-            <img src="https://github.com/ArthurRamos26/Aniversario_Ste/blob/f107124d02988bab17787103859976a8a2c0bab0/Foto_Branco.jpg/600x1200" alt="A gente mais novinho">
-            <img src="https://github.com/ArthurRamos26/Aniversario_Ste/blob/f107124d02988bab17787103859976a8a2c0bab0/Foto_Franja.jpg/600x1200" alt="O primeiro show que passamos como casal">
-            <img src="https://github.com/ArthurRamos26/Aniversario_Ste/blob/f107124d02988bab17787103859976a8a2c0bab0/Foto_Azul%20.jpg/600x1200" alt="Foto especial 3">
+            <img src="https://github.com/ArthurRamos26/Aniversario_Ste/blob/7cf704ebcbb2b86a7c0363d6e6f585f440702de7/Foto_Branco.jpg/600x1200" alt="A gente mais novinho">
+            <img src="https://github.com/ArthurRamos26/Aniversario_Ste/blob/7cf704ebcbb2b86a7c0363d6e6f585f440702de7/Foto_Franja.jpg/600x1200" alt="O primeiro show que passamos como casal">
+            <img src="https://github.com/ArthurRamos26/Aniversario_Ste/blob/7cf704ebcbb2b86a7c0363d6e6f585f440702de7/Foto_Azul%20.jpg/600x1200" alt="Foto especial 3">
         </div>
         <p class="rodape" id="fraseGeral">Carregando uma letra de música que me lembra vc</p>
     </div>
