@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Feliz Aniversário,Meu bem !</title>
+    <title>Feliz Aniversário, Meu bem!</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -25,7 +25,7 @@
         }
         .image-gallery img {
             width: 100%;
-            height: 100vh;
+            height: auto;
             object-fit: cover;
             margin-top: 10px;
             border-radius: 10px;
@@ -41,11 +41,20 @@
             try {
                 const respostaTeAmo = await fetch('https://raw.githubusercontent.com/ArthurRamos26/Aniversario_Ste/main/teamo.json');
                 const respostaFrases = await fetch('https://raw.githubusercontent.com/ArthurRamos26/Aniversario_Ste/main/frases.json');
+                
+                if (!respostaTeAmo.ok || !respostaFrases.ok) {
+                    throw new Error('Erro ao carregar os arquivos JSON');
+                }
+                
                 const dadosTeAmo = await respostaTeAmo.json();
                 const dadosFrases = await respostaFrases.json();
                 
-                const frasesTeAmo = dadosTeAmo.frases;
-                const frasesGerais = dadosFrases.frases;
+                const frasesTeAmo = dadosTeAmo["te amo"] || [];
+                const frasesGerais = dadosFrases.frases || [];
+                
+                if (frasesTeAmo.length === 0 || frasesGerais.length === 0) {
+                    throw new Error('JSON carregado, mas sem frases disponíveis');
+                }
                 
                 const fraseTeAmoAleatoria = frasesTeAmo[Math.floor(Math.random() * frasesTeAmo.length)];
                 const fraseGeralAleatoria = frasesGerais[Math.floor(Math.random() * frasesGerais.length)];
@@ -58,6 +67,7 @@
                 document.getElementById('fraseGeral').innerText = 'Erro ao carregar a frase especial. Tente novamente mais tarde!';
             }
         }
+        
         window.onload = carregarFrases;
     </script>
 </head>
@@ -69,9 +79,8 @@
            <img src="https://raw.githubusercontent.com/ArthurRamos26/Aniversario_Ste/main/Foto_Branco.jpg" alt="A gente mais novinho">
            <img src="https://raw.githubusercontent.com/ArthurRamos26/Aniversario_Ste/main/Foto_Franja.jpg" alt="O primeiro show que passamos como casal">
            <img src="https://raw.githubusercontent.com/ArthurRamos26/Aniversario_Ste/main/Foto_Azul.jpg" alt="Foto especial 3">
-
         </div>
-        <p class="rodape" id="fraseGeral">Carregando uma letra de música que me lembra vc</p>
+        <p class="rodape" id="fraseGeral">Carregando uma letra de música que me lembra você...</p>
     </div>
 </body>
 </html>
