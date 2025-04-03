@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feliz Aniversário!</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #ffe4e1;
+            color: #333;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        img {
+            max-width: 100%;
+            border-radius: 10px;
+            margin-top: 10px;
+        }
+    </style>
+    <script>
+        async function carregarFrase() {
+            try {
+                const resposta = await fetch('https://raw.githubusercontent.com/seu-usuario/seu-repositorio/main/frases.json');
+                const dados = await resposta.json();
+                const frases = dados.frases;
+                const fraseAleatoria = frases[Math.floor(Math.random() * frases.length)];
+                document.getElementById('frase').innerText = fraseAleatoria;
+            } catch (error) {
+                console.error('Erro ao carregar a frase:', error);
+                document.getElementById('frase').innerText = 'Erro ao carregar a frase. Tente novamente mais tarde!';
+            }
+        }
+        window.onload = carregarFrase;
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Feliz Aniversário, Amor! 🎉</h1>
+        <p id="frase">Carregando uma frase especial...</p>
+        <img src="https://via.placeholder.com/400" alt="Foto especial">
+        <p>Que seu dia seja cheio de alegria, amor e momentos inesquecíveis!</p>
+        <p>Te amo! ❤️</p>
+    </div>
+</body>
+</html>
