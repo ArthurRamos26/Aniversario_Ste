@@ -14,6 +14,9 @@
             background-image: url('https://source.unsplash.com/1600x900/?flowers');
             background-size: cover;
             background-position: center;
+            margin: 0;
+            height: 100vh;
+            overflow: hidden;
         }
         .container {
             max-width: 90%;
@@ -22,6 +25,7 @@
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.2);
+            display: none; /* Inicialmente oculto */
         }
         .image-gallery img {
             width: 100%;
@@ -35,8 +39,116 @@
             font-style: italic;
             color: #ccc;
         }
+        #bloqueio {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            backdrop-filter: blur(5px);
+        }
+        #bloqueio-content {
+            text-align: center;
+            padding: 30px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+            max-width: 80%;
+        }
+        #bloqueio img {
+            max-width: 250px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 3px solid gold;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+        }
+        #bloqueio h1 {
+            color: gold;
+            margin-bottom: 15px;
+            font-size: 1.8em;
+            text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+        }
+        #bloqueio p {
+            color: #ccc;
+            font-size: 1.1em;
+            margin-top: 10px;
+        }
+        @media (max-width: 600px) {
+            #bloqueio img {
+                max-width: 180px;
+            }
+            #bloqueio h1 {
+                font-size: 1.4em;
+            }
+        }
     </style>
+</head>
+<body>
+    <!-- Tela de bloqueio (aparece primeiro) -->
+    <div id="bloqueio">
+        <div id="bloqueio-content">
+            <img src="https://raw.githubusercontent.com/ArthurRamos26/Aniversario_Ste/main/Foto_Branco.jpg" alt="Nossa foto especial">
+            <h1>❤️ Acesse o Seu Presente Especial ❤️</h1>
+            <p>Dica: O dia que eu te disse o quanto você ilumina minha vida ✨</p>
+        </div>
+    </div>
+
+    <!-- Conteúdo principal (oculto até digitar a senha) -->
+    <div class="container" id="conteudo">
+        <h1>Feliz Aniversário, Stezinha! 🎉</h1>
+        <p id="teAmo"><strong>Carregando "Te Amo" em uma língua diferente...</strong></p>
+        <div class="image-gallery">
+           <img src="https://raw.githubusercontent.com/ArthurRamos26/Aniversario_Ste/main/Foto_Branco.jpg" alt="A gente mais novinho">
+           <img src="https://raw.githubusercontent.com/ArthurRamos26/Aniversario_Ste/main/Foto_Franja.jpg" alt="O primeiro show que passamos como casal">
+           <img src="https://raw.githubusercontent.com/ArthurRamos26/Aniversario_Ste/main/Foto_Azul.jpg" alt="Foto especial 3">
+        </div>
+        <p class="rodape" id="fraseGeral">Carregando uma letra de música que me lembra você...</p>
+    </div>
+
     <script>
+        // Função para verificar a senha
+        function verificarSenha() {
+            // Senhas válidas (variações da data 07/03/2025)
+            const senhasValidas = ["070325", "7325", "7032025", "07032025", "07325"];
+            
+            // Pede a senha com uma dica romântica
+            const senhaInserida = prompt("Digite a senha (Dica: O dia que nosso amor brilhou mais forte ✨):");
+            
+            // Verifica se a senha está correta
+            if (senhasValidas.includes(senhaInserida)) {
+                // Efeito visual ao acertar
+                document.getElementById("bloqueio").style.opacity = "0";
+                document.getElementById("bloqueio").style.transition = "opacity 1s ease";
+                
+                setTimeout(() => {
+                    document.getElementById("bloqueio").style.display = "none";
+                    document.getElementById("conteudo").style.display = "block";
+                }, 1000);
+                
+                // Efeito de confete (opcional)
+                setTimeout(() => {
+                    const confettiSettings = { target: 'conteudo', size: 1.5, rotate: true };
+                    const confetti = new ConfettiGenerator(confettiSettings);
+                    confetti.render();
+                    setTimeout(() => confetti.clear(), 3000);
+                }, 1500);
+            } else {
+                alert("Quase lá, amor! Tente novamente. ❤️");
+                // Efeito de tremor na tela de bloqueio
+                document.getElementById("bloqueio-content").style.animation = "shake 0.5s";
+                setTimeout(() => {
+                    document.getElementById("bloqueio-content").style.animation = "none";
+                }, 500);
+            }
+        }
+
+        // Função original para carregar frases
         async function carregarFrases() {
             try {
                 const respostaTeAmo = await fetch('https://raw.githubusercontent.com/ArthurRamos26/Aniversario_Ste/main/teamo.json');
@@ -67,20 +179,26 @@
                 document.getElementById('fraseGeral').innerText = 'Erro ao carregar a frase especial. Tente novamente mais tarde!';
             }
         }
-        
-        window.onload = carregarFrases;
+
+        // Executa as funções quando a página carrega
+        window.onload = function() {
+            verificarSenha();
+            carregarFrases();
+            
+            // Adiciona animação de shake (para quando errar a senha)
+            const style = document.createElement('style');
+            style.innerHTML = `
+                @keyframes shake {
+                    0%, 100% { transform: translateX(0); }
+                    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+                    20%, 40%, 60%, 80% { transform: translateX(5px); }
+                }
+            `;
+            document.head.appendChild(style);
+        };
     </script>
-</head>
-<body>
-    <div class="container">
-        <h1>Feliz Aniversário, Stezinha! 🎉</h1>
-        <p id="teAmo"><strong>Carregando "Te Amo" em uma língua diferente...</strong></p>
-        <div class="image-gallery">
-           <img src="https://raw.githubusercontent.com/ArthurRamos26/Aniversario_Ste/main/Foto_Branco.jpg" alt="A gente mais novinho">
-           <img src="https://raw.githubusercontent.com/ArthurRamos26/Aniversario_Ste/main/Foto_Franja.jpg" alt="O primeiro show que passamos como casal">
-           <img src="https://raw.githubusercontent.com/ArthurRamos26/Aniversario_Ste/main/Foto_Azul.jpg" alt="Foto especial 3">
-        </div>
-        <p class="rodape" id="fraseGeral">Carregando uma letra de música que me lembra você...</p>
-    </div>
+    
+    <!-- Biblioteca para efeito de confete (opcional) -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.4.0/dist/confetti.browser.min.js"></script>
 </body>
 </html>
