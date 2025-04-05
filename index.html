@@ -4,72 +4,218 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Feliz Aniversário, Meu bem!</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>❤️</text></svg>">
     <style>
+        :root {
+            --cor-destaque: #ff6b6b;
+            --cor-texto: #333;
+            --cor-fundo: #f8f9fa;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            background-color: #1a1a1a;
-            color: #fff;
+            font-family: 'Arial', sans-serif;
+            background-color: var(--cor-fundo);
+            color: var(--cor-texto);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Layout principal */
+        .main-container {
+            display: none; /* Inicialmente oculto */
+            grid-template-columns: 1fr 2fr 1fr;
+            gap: 20px;
+            max-width: 1200px;
+            margin: 30px auto;
             padding: 20px;
-            background-image: url('https://source.unsplash.com/1600x900/?flowers');
+        }
+
+        /* Coluna da esquerda - Fotos */
+        .photo-column {
+            background: white;
+            border-radius: 15px;
+            padding: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            height: fit-content;
+        }
+
+        .photo-slider {
+            position: relative;
+            height: 400px;
+            overflow: hidden;
+            border-radius: 10px;
+        }
+
+        .photo-slide {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 1s ease;
             background-size: cover;
             background-position: center;
-            background-attachment: fixed;
-            margin: 0;
-            min-height: 100vh;
         }
-        .container {
-            max-width: 90%;
-            margin: 20px auto;
-            background: rgba(0, 0, 0, 0.8);
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.2);
-            display: none; /* Inicialmente oculto */
+
+        .photo-slide.active {
+            opacity: 1;
         }
-        .image-slideshow {
-            position: relative;
-            max-width: 600px;
-            margin: 20px auto;
-            overflow: hidden;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+
+        .photo-controls {
+            display: flex;
+            justify-content: center;
+            margin-top: 15px;
+            gap: 10px;
         }
-        .slide {
-            display: none;
-            width: 100%;
-            transition: opacity 1s ease;
-        }
-        .slide.active {
-            display: block;
-        }
-        .slide img {
-            width: 100%;
-            border-radius: 10px;
-        }
-        .slide-controls {
-            margin-top: 10px;
-        }
-        .slide-controls button {
-            background: rgba(255, 255, 255, 0.3);
-            border: none;
+
+        .photo-controls button {
+            background: var(--cor-destaque);
             color: white;
-            padding: 5px 10px;
-            border-radius: 5px;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
             cursor: pointer;
-            margin: 0 5px;
+            transition: all 0.3s;
         }
-        .spotify-player {
-            margin: 20px auto;
-            max-width: 600px;
+
+        .photo-controls button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 3px 10px rgba(255,107,107,0.4);
+        }
+
+        /* Coluna central - Texto */
+        .text-column {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .text-column h2 {
+            color: var(--cor-destaque);
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .message-area {
+            flex-grow: 1;
+            background: #f8f9fa;
+            border: 2px dashed #ccc;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            min-height: 200px;
+        }
+
+        .edit-button {
+            align-self: center;
+            background: var(--cor-destaque);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+
+        .edit-button:hover {
+            background: #ff5252;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255,107,107,0.3);
+        }
+
+        /* Coluna da direita - Música */
+        .music-column {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            height: fit-content;
+        }
+
+        .music-player {
+            width: 100%;
             border-radius: 12px;
             overflow: hidden;
+            margin-top: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
-        .rodape {
-            margin-top: 20px;
-            font-style: italic;
-            color: #ccc;
+
+        .auto-play-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 10px;
+            gap: 8px;
         }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 24px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--cor-destaque);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        /* Responsividade */
+        @media (max-width: 900px) {
+            .main-container {
+                grid-template-columns: 1fr;
+                padding: 15px;
+            }
+            
+            .photo-slider {
+                height: 300px;
+            }
+
+            .music-column {
+                order: -1; /* Música fica no topo em mobile */
+            }
+        }
+
+        /* Tela de bloqueio */
         #bloqueio {
             position: fixed;
             top: 0;
@@ -84,14 +230,16 @@
             flex-direction: column;
             backdrop-filter: blur(5px);
         }
+
         #bloqueio-content {
             text-align: center;
             padding: 30px;
             background: rgba(0, 0, 0, 0.7);
             border-radius: 15px;
             box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
-            max-width: 80%;
+            max-width: 90%;
         }
+
         #bloqueio img {
             max-width: 250px;
             border-radius: 10px;
@@ -99,25 +247,20 @@
             border: 3px solid gold;
             box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
         }
+
         #bloqueio h1 {
             color: gold;
             margin-bottom: 15px;
             font-size: 1.8em;
             text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
         }
+
         #bloqueio p {
             color: #ccc;
             font-size: 1.1em;
             margin-top: 10px;
         }
-        @media (max-width: 600px) {
-            #bloqueio img {
-                max-width: 180px;
-            }
-            #bloqueio h1 {
-                font-size: 1.4em;
-            }
-        }
+
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
             10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
@@ -126,7 +269,7 @@
     </style>
 </head>
 <body>
-    <!-- Tela de bloqueio (aparece primeiro) -->
+    <!-- Tela de bloqueio -->
     <div id="bloqueio">
         <div id="bloqueio-content">
             <img src="https://raw.githubusercontent.com/ArthurRamos26/Aniversario_Ste/main/Foto_Branco.jpg" alt="Nossa foto especial">
@@ -135,73 +278,79 @@
         </div>
     </div>
 
-    <!-- Conteúdo principal (oculto até digitar a senha) -->
-    <div class="container" id="conteudo">
-        <h1>Feliz Aniversário, Stezinha! 🎉</h1>
-        <p id="teAmo"><strong>Carregando "Te Amo" em uma língua diferente...</strong></p>
-        
-        <!-- Slideshow de Fotos -->
-        <div class="image-slideshow">
-            <div class="slide active">
-                <img src="https://raw.githubusercontent.com/ArthurRamos26/Aniversario_Ste/main/Foto_Branco.jpg" alt="Nossa foto 1">
+    <!-- Conteúdo principal -->
+    <div class="main-container" id="conteudo">
+        <!-- Coluna da esquerda - Fotos -->
+        <div class="photo-column">
+            <h2>Nossos Momentos</h2>
+            <div class="photo-slider">
+                <div class="photo-slide active" style="background-image: url('https://raw.githubusercontent.com/ArthurRamos26/Aniversario_Ste/main/Foto_Branco.jpg')"></div>
+                <div class="photo-slide" style="background-image: url('https://raw.githubusercontent.com/ArthurRamos26/Aniversario_Ste/main/Foto_Franja.jpg')"></div>
+                <div class="photo-slide" style="background-image: url('https://raw.githubusercontent.com/ArthurRamos26/Aniversario_Ste/main/Foto_Azul.jpg')"></div>
             </div>
-            <div class="slide">
-                <img src="https://raw.githubusercontent.com/ArthurRamos26/Aniversario_Ste/main/Foto_Franja.jpg" alt="Nossa foto 2">
-            </div>
-            <div class="slide">
-                <img src="https://raw.githubusercontent.com/ArthurRamos26/Aniversario_Ste/main/Foto_Azul.jpg" alt="Nossa foto 3">
-            </div>
-            <div class="slide-controls">
-                <button onclick="prevSlide()">Anterior</button>
-                <button onclick="nextSlide()">Próxima</button>
+            <div class="photo-controls">
+                <button onclick="prevPhoto()">Anterior</button>
+                <button onclick="nextPhoto()">Próxima</button>
             </div>
         </div>
 
-        <!-- Player do Spotify -->
-        <div class="spotify-player">
-            <iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/0Z5IDWR4JHuJo7FBsSoM1k?utm_source=generator&theme=0" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>                    width="100%" 
-                    height="80" 
-                    frameborder="0" 
-                    allowtransparency="true" 
-                    allow="encrypted-media">
-            </iframe>
+        <!-- Coluna central - Texto -->
+        <div class="text-column">
+            <h2>Minha Mensagem</h2>
+            <div class="message-area" id="messageText">
+                Feliz aniversário, meu amor! 💖<br><br>
+                Hoje é o seu dia especial e eu queria te dizer o quanto você é importante para mim. Cada momento ao seu lado é um presente que eu guardo com todo carinho no meu coração.<br><br>
+                Você é a pessoa mais incrível que eu já conheci e eu sou muito grato por ter você na minha vida. Que este novo ano de vida seja repleto de alegrias, conquistas e muito amor!
+            </div>
+            <button class="edit-button" onclick="editMessage()">Editar Mensagem</button>
         </div>
 
-        <p class="rodape" id="fraseGeral">Carregando uma letra de música que me lembra você...</p>
+        <!-- Coluna da direita - Música -->
+        <div class="music-column">
+            <h2>Nossa Música</h2>
+            <div class="music-player">
+                <iframe id="spotifyPlayer" src="https://open.spotify.com/embed/track/4cOdK2wGLETKBW3PvgPWqT?autoplay=false" 
+                        width="100%" 
+                        height="80" 
+                        frameborder="0" 
+                        allowtransparency="true" 
+                        allow="encrypted-media">
+                </iframe>
+            </div>
+            <div class="auto-play-toggle">
+                <span>Tocar automaticamente:</span>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="autoPlayToggle">
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <p style="text-align: center; margin-top: 15px; font-style: italic;">
+                Escolhi essa música porque ela me lembra você ❤️
+            </p>
+        </div>
     </div>
 
     <script>
         // Função para verificar a senha
         function verificarSenha() {
-            // Senhas válidas (variações da data 07/03/2025)
             const senhasValidas = ["070325", "7325", "7032025", "07032025", "07325"];
-            
-            // Pede a senha com uma dica romântica
             const senhaInserida = prompt("Digite a senha (Dica: O dia que nosso amor brilhou mais forte ✨):");
             
-            // Verifica se a senha está correta
             if (senhasValidas.includes(senhaInserida)) {
-                // Efeito visual ao acertar
                 document.getElementById("bloqueio").style.opacity = "0";
                 document.getElementById("bloqueio").style.transition = "opacity 1s ease";
                 
                 setTimeout(() => {
                     document.getElementById("bloqueio").style.display = "none";
-                    document.getElementById("conteudo").style.display = "block";
+                    document.getElementById("conteudo").style.display = "grid";
                     document.body.style.overflow = "auto";
-                    // Inicia o slideshow automaticamente
                     startSlideshow();
-                }, 1000);
-                
-                // Efeito de confete (opcional)
-                setTimeout(() => {
-                    if (typeof ConfettiGenerator !== 'undefined') {
-                        const confettiSettings = { target: 'conteudo', size: 1.5, rotate: true };
-                        const confetti = new ConfettiGenerator(confettiSettings);
-                        confetti.render();
-                        setTimeout(() => confetti.clear(), 3000);
+                    
+                    // Verifica se o autoplay está ativado
+                    if (document.getElementById('autoPlayToggle').checked) {
+                        enableAutoplay();
                     }
-                }, 1500);
+                }, 1000);
             } else {
                 alert("Quase lá, amor! Tente novamente. ❤️");
                 document.getElementById("bloqueio-content").style.animation = "shake 0.5s";
@@ -211,71 +360,74 @@
             }
         }
 
-        // Função para carregar frases
-        async function carregarFrases() {
-            try {
-                const respostaTeAmo = await fetch('https://raw.githubusercontent.com/ArthurRamos26/Aniversario_Ste/main/teamo.json');
-                const respostaFrases = await fetch('https://raw.githubusercontent.com/ArthurRamos26/Aniversario_Ste/main/frases.json');
-                
-                if (!respostaTeAmo.ok || !respostaFrases.ok) {
-                    throw new Error('Erro ao carregar os arquivos JSON');
-                }
-                
-                const dadosTeAmo = await respostaTeAmo.json();
-                const dadosFrases = await respostaFrases.json();
-                
-                const frasesTeAmo = dadosTeAmo["te amo"] || [];
-                const frasesGerais = dadosFrases.frases || [];
-                
-                if (frasesTeAmo.length === 0 || frasesGerais.length === 0) {
-                    throw new Error('JSON carregado, mas sem frases disponíveis');
-                }
-                
-                const fraseTeAmoAleatoria = frasesTeAmo[Math.floor(Math.random() * frasesTeAmo.length)];
-                const fraseGeralAleatoria = frasesGerais[Math.floor(Math.random() * frasesGerais.length)];
-                
-                document.getElementById('teAmo').innerText = fraseTeAmoAleatoria;
-                document.getElementById('fraseGeral').innerText = fraseGeralAleatoria;
-            } catch (error) {
-                console.error('Erro ao carregar as frases:', error);
-                document.getElementById('teAmo').innerText = 'Te amo mais que tudo neste mundo! ❤️';
-                document.getElementById('fraseGeral').innerText = 'Você é a melodia do meu coração. Feliz aniversário, amor!';
-            }
-        }
-
         // Slideshow de fotos
-        let currentSlide = 0;
-        const slides = document.querySelectorAll('.slide');
+        let currentPhoto = 0;
+        const photos = document.querySelectorAll('.photo-slide');
+        let slideshowInterval;
         
-        function showSlide(index) {
-            slides.forEach((slide, i) => {
+        function showPhoto(index) {
+            photos.forEach((photo, i) => {
                 if (i === index) {
-                    slide.classList.add('active');
+                    photo.classList.add('active');
                 } else {
-                    slide.classList.remove('active');
+                    photo.classList.remove('active');
                 }
             });
         }
         
-        function nextSlide() {
-            currentSlide = (currentSlide + 1) % slides.length;
-            showSlide(currentSlide);
+        function nextPhoto() {
+            currentPhoto = (currentPhoto + 1) % photos.length;
+            showPhoto(currentPhoto);
         }
         
-        function prevSlide() {
-            currentSlide = (currentSlide - 1 + slides.length) % slides.length;
-            showSlide(currentSlide);
+        function prevPhoto() {
+            currentPhoto = (currentPhoto - 1 + photos.length) % photos.length;
+            showPhoto(currentPhoto);
         }
         
         function startSlideshow() {
-            setInterval(nextSlide, 3000); // Troca a cada 3 segundos
+            clearInterval(slideshowInterval);
+            slideshowInterval = setInterval(nextPhoto, 5000); // Troca a cada 5 segundos
         }
 
-        // Executa as funções quando a página carrega
+        // Editar mensagem
+        function editMessage() {
+            const messageArea = document.getElementById('messageText');
+            const currentMessage = messageArea.innerText;
+            const newMessage = prompt("Edite sua mensagem especial:", currentMessage);
+            
+            if (newMessage !== null) {
+                messageArea.innerText = newMessage;
+            }
+        }
+
+        // Controle de autoplay do Spotify
+        function enableAutoplay() {
+            const player = document.getElementById('spotifyPlayer');
+            const currentSrc = player.src;
+            
+            // Remove o parâmetro de autoplay se existir
+            const newSrc = currentSrc.includes('autoplay=true') 
+                ? currentSrc 
+                : currentSrc.replace('autoplay=false', 'autoplay=true');
+            
+            player.src = newSrc;
+        }
+
+        // Inicialização
         window.onload = function() {
             document.body.style.overflow = "hidden";
             verificarSenha();
-            carregarFrases();
+            
+            // Configura o toggle de autoplay
+            document.getElementById('autoPlayToggle').addEventListener('change', function() {
+                if (this.checked) {
+                    enableAutoplay();
+                } else {
+                    const player = document.getElementById('spotifyPlayer');
+                    player.src = player.src.replace('autoplay=true', 'autoplay=false');
+                }
+            });
         };
     </script>
 </body>
