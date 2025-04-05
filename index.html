@@ -27,14 +27,43 @@
             box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.2);
             display: none; /* Inicialmente oculto */
         }
-        .image-gallery img {
-            width: 100%;
+        .image-slideshow {
+            position: relative;
             max-width: 600px;
-            height: auto;
-            object-fit: cover;
-            margin: 10px auto;
+            margin: 20px auto;
+            overflow: hidden;
             border-radius: 10px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+        .slide {
+            display: none;
+            width: 100%;
+            transition: opacity 1s ease;
+        }
+        .slide.active {
             display: block;
+        }
+        .slide img {
+            width: 100%;
+            border-radius: 10px;
+        }
+        .slide-controls {
+            margin-top: 10px;
+        }
+        .slide-controls button {
+            background: rgba(255, 255, 255, 0.3);
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 0 5px;
+        }
+        .spotify-player {
+            margin: 20px auto;
+            max-width: 600px;
+            border-radius: 12px;
+            overflow: hidden;
         }
         .rodape {
             margin-top: 20px;
@@ -110,11 +139,34 @@
     <div class="container" id="conteudo">
         <h1>Feliz Aniversário, Stezinha! 🎉</h1>
         <p id="teAmo"><strong>Carregando "Te Amo" em uma língua diferente...</strong></p>
-        <div class="image-gallery">
-           <img src="https://raw.githubusercontent.com/ArthurRamos26/Aniversario_Ste/main/Foto_Branco.jpg" alt="A gente mais novinho">
-           <img src="https://raw.githubusercontent.com/ArthurRamos26/Aniversario_Ste/main/Foto_Franja.jpg" alt="O primeiro show que passamos como casal">
-           <img src="https://raw.githubusercontent.com/ArthurRamos26/Aniversario_Ste/main/Foto_Azul.jpg" alt="Foto especial 3">
+        
+        <!-- Slideshow de Fotos -->
+        <div class="image-slideshow">
+            <div class="slide active">
+                <img src="https://raw.githubusercontent.com/ArthurRamos26/Aniversario_Ste/main/Foto_Branco.jpg" alt="Nossa foto 1">
+            </div>
+            <div class="slide">
+                <img src="https://raw.githubusercontent.com/ArthurRamos26/Aniversario_Ste/main/Foto_Franja.jpg" alt="Nossa foto 2">
+            </div>
+            <div class="slide">
+                <img src="https://raw.githubusercontent.com/ArthurRamos26/Aniversario_Ste/main/Foto_Azul.jpg" alt="Nossa foto 3">
+            </div>
+            <div class="slide-controls">
+                <button onclick="prevSlide()">Anterior</button>
+                <button onclick="nextSlide()">Próxima</button>
+            </div>
         </div>
+
+        <!-- Player do Spotify -->
+        <div class="spotify-player">
+            <iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/0Z5IDWR4JHuJo7FBsSoM1k?utm_source=generator&theme=0" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>                    width="100%" 
+                    height="80" 
+                    frameborder="0" 
+                    allowtransparency="true" 
+                    allow="encrypted-media">
+            </iframe>
+        </div>
+
         <p class="rodape" id="fraseGeral">Carregando uma letra de música que me lembra você...</p>
     </div>
 
@@ -136,8 +188,9 @@
                 setTimeout(() => {
                     document.getElementById("bloqueio").style.display = "none";
                     document.getElementById("conteudo").style.display = "block";
-                    // Remove o overflow hidden quando o conteúdo é mostrado
                     document.body.style.overflow = "auto";
+                    // Inicia o slideshow automaticamente
+                    startSlideshow();
                 }, 1000);
                 
                 // Efeito de confete (opcional)
@@ -151,7 +204,6 @@
                 }, 1500);
             } else {
                 alert("Quase lá, amor! Tente novamente. ❤️");
-                // Efeito de tremor na tela de bloqueio
                 document.getElementById("bloqueio-content").style.animation = "shake 0.5s";
                 setTimeout(() => {
                     document.getElementById("bloqueio-content").style.animation = "none";
@@ -191,11 +243,37 @@
             }
         }
 
+        // Slideshow de fotos
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                if (i === index) {
+                    slide.classList.add('active');
+                } else {
+                    slide.classList.remove('active');
+                }
+            });
+        }
+        
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % slides.length;
+            showSlide(currentSlide);
+        }
+        
+        function prevSlide() {
+            currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+            showSlide(currentSlide);
+        }
+        
+        function startSlideshow() {
+            setInterval(nextSlide, 3000); // Troca a cada 3 segundos
+        }
+
         // Executa as funções quando a página carrega
         window.onload = function() {
-            // Impede a rolagem inicialmente
             document.body.style.overflow = "hidden";
-            
             verificarSenha();
             carregarFrases();
         };
