@@ -8,6 +8,7 @@
     <style>
         :root {
             --cor-destaque: #ff6b6b;
+            --cor-secundaria: #4a6fa5;
             --cor-texto: #333;
             --cor-fundo: #f8f9fa;
         }
@@ -24,7 +25,7 @@
 
         /* Layout principal */
         .main-container {
-            display: none; /* Inicialmente oculto */
+            display: none;
             grid-template-columns: 1fr 2fr 1fr;
             gap: 20px;
             max-width: 1200px;
@@ -109,11 +110,12 @@
             padding: 20px;
             margin-bottom: 20px;
             min-height: 200px;
+            line-height: 1.6;
         }
 
-        .edit-button {
+        .language-button {
             align-self: center;
-            background: var(--cor-destaque);
+            background: var(--cor-secundaria);
             color: white;
             border: none;
             padding: 10px 20px;
@@ -121,12 +123,22 @@
             cursor: pointer;
             transition: all 0.3s;
             font-weight: bold;
+            margin-top: 10px;
         }
 
-        .edit-button:hover {
-            background: #ff5252;
+        .language-button:hover {
+            background: #3a5a8a;
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(255,107,107,0.3);
+            box-shadow: 0 5px 15px rgba(74, 111, 165, 0.3);
+        }
+
+        .love-language {
+            text-align: center;
+            margin-top: 15px;
+            font-style: italic;
+            font-size: 1.1em;
+            color: var(--cor-destaque);
+            min-height: 24px;
         }
 
         /* Coluna da direita - Música */
@@ -211,7 +223,7 @@
             }
 
             .music-column {
-                order: -1; /* Música fica no topo em mobile */
+                order: -1;
             }
         }
 
@@ -272,9 +284,9 @@
     <!-- Tela de bloqueio -->
     <div id="bloqueio">
         <div id="bloqueio-content">
-            <img src="https://raw.githubusercontent.com/ArthurRamos26/Aniversario_Ste/main/Foto_Branco.jpg" alt="Nossa foto especial">
+            <img src="https://raw.githubusercontent.com/ArthurRamos26/Aniversario_Ste/main/Foto_Branco.jpg" alt="Um dos seus presentes ">
             <h1>❤️ Acesse o Seu Presente Especial ❤️</h1>
-            <p>Dica: O dia que eu te disse o quanto você ilumina minha vida ✨</p>
+            <p>Dica: O dia que eu tentei colocar em palavras o quanto eu te amo (se errar é so recarregar a página meu bem kkk )</p>
         </div>
     </div>
 
@@ -297,25 +309,32 @@
         <!-- Coluna central - Texto -->
         <div class="text-column">
             <h2>Minha Mensagem</h2>
-            <div class="message-area" id="messageText">
+            <div class="message-area">
                 Feliz aniversário, meu amor! 💖<br><br>
                 Hoje é o seu dia especial e eu queria te dizer o quanto você é importante para mim. Cada momento ao seu lado é um presente que eu guardo com todo carinho no meu coração.<br><br>
                 Você é a pessoa mais incrível que eu já conheci e eu sou muito grato por ter você na minha vida. Que este novo ano de vida seja repleto de alegrias, conquistas e muito amor!
             </div>
-            <button class="edit-button" onclick="editMessage()">Editar Mensagem</button>
+            
+            <button class="language-button" onclick="changeLoveLanguage()">
+                Mudar "Eu te amo" de língua
+            </button>
+            
+            <div class="love-language" id="teAmo">
+                Carregando "Eu te amo" em diferentes línguas...
+            </div>
         </div>
 
         <!-- Coluna da direita - Música -->
         <div class="music-column">
             <h2>Nossa Música</h2>
-            <div class="music-player">
-                <iframe id="spotifyPlayer" src="https://open.spotify.com/embed/track/4cOdK2wGLETKBW3PvgPWqT?autoplay=false" 
-                        width="100%" 
-                        height="80" 
-                        frameborder="0" 
-                        allowtransparency="true" 
-                        allow="encrypted-media">
-                </iframe>
+            <iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/1gSQpzfCLHngQyW1sJzWRv?utm_source=generator" 
+            width="100%"
+            height="352" 
+            frameBorder="0" 
+            allowfullscreen="" 
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
+            loading="lazy">
+            </iframe>
             </div>
             <div class="auto-play-toggle">
                 <span>Tocar automaticamente:</span>
@@ -325,7 +344,7 @@
                 </label>
             </div>
             <p style="text-align: center; margin-top: 15px; font-style: italic;">
-                Escolhi essa música porque ela me lembra você ❤️
+                Escolhi essa música porque ela me lembra voce na verdade qualquer uma do lagum mas essa em específico consugue descrever o que eu sinto. 
             </p>
         </div>
     </div>
@@ -346,13 +365,12 @@
                     document.body.style.overflow = "auto";
                     startSlideshow();
                     
-                    // Verifica se o autoplay está ativado
                     if (document.getElementById('autoPlayToggle').checked) {
                         enableAutoplay();
                     }
                 }, 1000);
             } else {
-                alert("Quase lá, amor! Tente novamente. ❤️");
+                alert("Quase lá, Stezinha! Tente novamente. ❤️");
                 document.getElementById("bloqueio-content").style.animation = "shake 0.5s";
                 setTimeout(() => {
                     document.getElementById("bloqueio-content").style.animation = "none";
@@ -387,37 +405,47 @@
         
         function startSlideshow() {
             clearInterval(slideshowInterval);
-            slideshowInterval = setInterval(nextPhoto, 5000); // Troca a cada 5 segundos
-        }
-
-        // Editar mensagem
-        function editMessage() {
-            const messageArea = document.getElementById('messageText');
-            const currentMessage = messageArea.innerText;
-            const newMessage = prompt("Edite sua mensagem especial:", currentMessage);
-            
-            if (newMessage !== null) {
-                messageArea.innerText = newMessage;
-            }
+            slideshowInterval = setInterval(nextPhoto, 5000);
         }
 
         // Controle de autoplay do Spotify
         function enableAutoplay() {
             const player = document.getElementById('spotifyPlayer');
             const currentSrc = player.src;
-            
-            // Remove o parâmetro de autoplay se existir
             const newSrc = currentSrc.includes('autoplay=true') 
                 ? currentSrc 
                 : currentSrc.replace('autoplay=false', 'autoplay=true');
-            
             player.src = newSrc;
+        }
+
+        // Carregar e mudar "Eu te amo" em diferentes línguas
+        async function changeLoveLanguage() {
+            try {
+                const response = await fetch('https://raw.githubusercontent.com/ArthurRamos26/Aniversario_Ste/main/teamo.json');
+                if (!response.ok) throw new Error('Erro ao carregar as línguas');
+                
+                const data = await response.json();
+                const frases = data["te amo"] || [];
+                
+                if (frases.length === 0) throw new Error('Nenhuma frase encontrada');
+                
+                const randomIndex = Math.floor(Math.random() * frases.length);
+                const frase = frases[randomIndex];
+                document.getElementById('teAmo').textContent = frase;
+                
+            } catch (error) {
+                console.error('Erro:', error);
+                document.getElementById('teAmo').textContent = 'Eu te amo e vou falar em quantas línguas forem necessárias S2';
+            }
         }
 
         // Inicialização
         window.onload = function() {
             document.body.style.overflow = "hidden";
             verificarSenha();
+            
+            // Carrega uma frase de "Eu te amo" automaticamente
+            changeLoveLanguage();
             
             // Configura o toggle de autoplay
             document.getElementById('autoPlayToggle').addEventListener('change', function() {
